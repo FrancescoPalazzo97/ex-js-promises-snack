@@ -5,17 +5,10 @@ const getPost = id => {
     return new Promise((resolve, reject) => {
         fetch(`${API_POST}${id}`)
             .then(res => res.json())
-            .then(post => {
-                fetch(`${API_USERS}${post.userId}`)
-                    .then(res => res.json())
-                    .then(user => {
-                        const newObj = {
-                            ...post,
-                            user
-                        }
-                        resolve(newObj)
-                    })
-            })
+            .then(post => fetch(`${API_USERS}${post.userId}`)
+                .then(res => res.json())
+                .then(user => resolve({ ...post, user }))
+            )
             .catch(reject)
     })
 }
